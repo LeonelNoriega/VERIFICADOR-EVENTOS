@@ -1,0 +1,16 @@
+body {
+  font-family: sans-serif;
+  text-align: center;
+  margin: 30px;
+}
+
+#reader {
+  margin: auto;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+#resultado {
+  font-weight: bold;
+  margin-top: 20px;
+}
