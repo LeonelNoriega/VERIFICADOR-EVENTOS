@@ -1,16 +1,44 @@
-body {
-  font-family: sans-serif;
-  text-align: center;
-  margin: 30px;
+function procesarDNI(texto) {
+  // Simulamos una base de datos simple
+  const permitidos = [
+    "12345678",
+    "87654321",
+    "44112233",
+    "30999888"
+  ];
+
+  // Buscamos el número de DNI dentro del código escaneado
+  const coincidencia = texto.match(/\d{7,8}/);
+  const dni = coincidencia ? coincidencia[0] : null;
+
+  if (dni) {
+    if (permitidos.includes(dni)) {
+      document.getElementById("resultado").innerText = `✅ DNI ${dni} autorizado`;
+    } else {
+      document.getElementById("resultado").innerText = `❌ DNI ${dni} no autorizado`;
+    }
+  } else {
+    document.getElementById("resultado").innerText = "No se pudo leer el DNI";
+  }
 }
 
-#reader {
-  margin: auto;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-}
+const scanner = new Html5Qrcode("reader");
 
-#resultado {
-  font-weight: bold;
-  margin-top: 20px;
-}
+Html5Qrcode.getCameras().then(cameras => {
+  if (cameras && cameras.length) {
+    scanner.start(
+      cameras[0].id,
+      {
+        fps: 10,
+        qrbox: { width: 250, height: 250 }
+      },
+      (decodedText, decodedResult) => {
+        scanner.stop();
+        procesarDNI(decodedText);
+      },
+      errorMessage => {
+        // podés mostrar errores si querés
+      }
+    );
+  }
+});
